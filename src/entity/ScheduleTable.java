@@ -30,7 +30,7 @@ public class ScheduleTable implements Displayable {
     @Override
     public void displayInfo() {
         for (int i = 0; i < details.length; i++) {
-            System.out.printf("%-24s | %-24s | %-12s |\n", this.driver.getName(), this.details[i].getRoute(), this.details[i].getRound());
+            System.out.printf("%-24s | %-24s | %-12s |\n", this.driver.getName(), this.details[i].getRoute().getRouteId(), this.details[i].getRound());
         }
     }
 }

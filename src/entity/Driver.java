@@ -15,7 +15,6 @@ public class Driver extends Person {
     public Driver() {
         this.id = AUTO_ID;
         AUTO_ID++;
-        this.totalRound = 15;
     }
 
     public int getId() {

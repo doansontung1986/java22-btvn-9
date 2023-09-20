@@ -124,19 +124,21 @@ public class ScheduleTableLogic {
                 round = new Scanner(System.in).nextInt();
 
                 if (round > 0 && round < 16) {
-                    break;
+                    int sumRound = driver.getTotalRound() + round;
+                    if (driver.getTotalRound() == 15) {
+                        System.out.println("Đã đủ số lượt trong ngày");
+                        break;
+                    } else if (sumRound <= 15) {
+                        driver.setTotalRound(sumRound);
+                        break;
+                    } else {
+                        int remainingRound = 15 - driver.getTotalRound();
+                        System.out.println("Số lượt trong ngày không đủ. Hiện ta còn " + remainingRound + " lượt");
+                    }
                 } else {
                     System.out.println("Số lượt trong ngày tối đa là 15");
                 }
-
-                if (round > driver.getTotalRound()) {
-                    System.out.println("Số lượt còn lại trong ngày của lái xe không đủ");
-                } else {
-                    break;
-                }
             } while (true);
-
-            driver.setTotalRound(driver.getTotalRound() - round);
 
             RouteDetail routeDetail = new RouteDetail(route, round);
             routeDetails[count] = routeDetail;
@@ -164,12 +166,21 @@ public class ScheduleTableLogic {
 
     public ScheduleTable[] sortScheduleTableByDriverName(ScheduleTable[] scheduleTables) {
         ScheduleTable[] sortedScheduleTable = Arrays.copyOf(scheduleTables, scheduleTables.length);
+
         for (int i = 0; i < sortedScheduleTable.length - 1; i++) {
             boolean isSwap = false;
-            for (int j = i; j < sortedScheduleTable.length; j++) {
-                Driver driver = sortedScheduleTable[i].getDriver();
-                Driver nextDriver = sortedScheduleTable[j].getDriver();
-                if (driver.getName().compareTo(nextDriver.getName()) > 0) {
+            Driver driver = null;
+            if (sortedScheduleTable[i] != null) {
+                driver = sortedScheduleTable[i].getDriver();
+            }
+
+            for (int j = i + 1; j < sortedScheduleTable.length; j++) {
+                Driver nextDriver = null;
+                if (sortedScheduleTable[j] != null) {
+                    nextDriver = sortedScheduleTable[j].getDriver();
+                }
+
+                if (driver != null && nextDriver != null && driver.getName().compareTo(nextDriver.getName()) > 0) {
                     swapElement(sortedScheduleTable, i, j);
                     isSwap = true;
                 }
@@ -186,10 +197,17 @@ public class ScheduleTableLogic {
         ScheduleTable[] sortedScheduleTable = Arrays.copyOf(scheduleTables, scheduleTables.length);
         for (int i = 0; i < sortedScheduleTable.length - 1; i++) {
             boolean isSwap = false;
-            for (int j = i; j < sortedScheduleTable.length; j++) {
-                Driver driver = sortedScheduleTable[i].getDriver();
-                Driver nextDriver = sortedScheduleTable[j].getDriver();
-                if (driver.getTotalRound() < (nextDriver.getTotalRound())) {
+            Driver driver = null;
+            if (sortedScheduleTable[i] != null) {
+                driver = sortedScheduleTable[i].getDriver();
+            }
+            for (int j = i + 1; j < sortedScheduleTable.length; j++) {
+                Driver nextDriver = null;
+                if (sortedScheduleTable[j] != null) {
+                    nextDriver = sortedScheduleTable[j].getDriver();
+                }
+
+                if (driver != null && nextDriver != null && driver.getTotalRound() < nextDriver.getTotalRound()) {
                     swapElement(sortedScheduleTable, i, j);
                     isSwap = true;
                 }
